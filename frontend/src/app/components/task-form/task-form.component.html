@@ -1,0 +1,18 @@
+<section class="task-form">
+  <h2 class="task-title">Crear Nueva Tarea</h2>
+
+  <form (ngSubmit)="saveTask()" class="form" enctype="multipart/form-data">
+    <input type="text" placeholder="Título" [(ngModel)]="task.titulo" name="titulo" required class="input" />
+    <textarea placeholder="Descripción" [(ngModel)]="task.descripcion" name="descripcion" required class="textarea"></textarea>
+    <input type="date" [(ngModel)]="task.fecha_limite" name="fecha_limite" required class="input" />
+
+    <div class="file-upload">
+      <label for="fileInput" class="custom-file-label">
+        📎 {{ selectedFile ? selectedFile.name : 'Seleccionar Archivo' }}
+      </label>
+      <input id="fileInput" type="file" (change)="onFileSelected($event)" class="file-input" />
+    </div>
+
+    <button type="submit" class="btn btn-submit">Guardar Tarea</button>
+  </form>
+</section>

@@ -1,0 +1,48 @@
+<h2 class="task-title">Lista de Tareas</h2>
+
+<!-- descargar la lista en Excel -->
+<button class="btn btn-excel" (click)="downloadTasksAsExcel()">📊 Descargar Excel</button>
+
+<ul class="task-items">
+  <li *ngFor="let task of tasks" class="task-item">
+    <div class="task-info">
+      <strong>{{ task.titulo }}</strong> - {{ task.estado }} (Fecha: {{ task.fecha_limite }})
+    </div>
+
+    <div class="task-actions">
+      <button class="btn btn-view" (click)="openModal(task)">👁️ Ver/Editar</button>
+      <button *ngIf="task.archivo" class="btn btn-download" (click)="downloadFile(task.archivo)">
+        📂 Descargar Archivo
+      </button>
+      <button *ngIf="task.id !== undefined" class="btn btn-delete" (click)="deleteTask(task.id!)">🗑️ Eliminar</button>
+    </div>
+  </li>
+</ul>
+
+<div *ngIf="selectedTask" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" (click)="closeModal()">&times;</span>
+    <h2>Editar Tarea</h2>
+
+    <form (ngSubmit)="updateTask()" enctype="multipart/form-data">
+      <input type="text" [(ngModel)]="selectedTask.titulo" name="titulo" required class="input" />
+      <textarea [(ngModel)]="selectedTask.descripcion" name="descripcion" required class="textarea"></textarea>
+      <input type="date" [(ngModel)]="selectedTask.fecha_limite" name="fecha_limite" required class="input" />
+
+      <!-- Descargar Archivo Existente -->
+      <p *ngIf="selectedTask.archivo">
+        <a [href]="'http://localhost:4300' + selectedTask.archivo" download target="_blank">📥 Descargar Archivo</a>
+      </p>
+
+      <!-- Cambiar Archivo -->
+      <div class="file-upload">
+        <label for="fileInput" class="custom-file-label">
+          📎 {{ selectedFile ? selectedFile.name : 'Cambiar Archivo' }}
+        </label>
+        <input id="fileInput" type="file" (change)="onFileSelected($event)" class="file-input" />
+      </div>
+
+      <button type="submit" class="btn btn-submit">Guardar Cambios</button>
+    </form>
+  </div>
+</div>
